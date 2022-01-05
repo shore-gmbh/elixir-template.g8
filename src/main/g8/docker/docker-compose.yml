@@ -19,7 +19,6 @@ services:
       - host
     depends_on:
       - $name$-db
-      - $name$-rabbitmq
 
   $name$-db:
     image: postgres:12.3
