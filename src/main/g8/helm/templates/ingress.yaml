@@ -1,0 +1,27 @@
+{{- if .Values.ingress.enabled -}}
+
+{{- \$serviceName := include "dory.fullname" . -}}
+{{- \$servicePort := .Values.service.externalPort -}}
+{{- \$path := .Values.ingress.path -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ \$serviceName }}-internal
+  labels:
+    {{- include "dory.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    {{- range \$host := .Values.ingress.hosts }}
+    - host: {{ \$host }}
+      http:
+        paths:
+        - path: {{ \$path }}
+          backend:
+            serviceName: {{ \$serviceName }}
+            servicePort: {{ \$servicePort }}
+    {{- end -}}
+{{- end -}}

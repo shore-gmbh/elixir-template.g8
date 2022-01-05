@@ -1,0 +1,171 @@
+version: 2.1
+
+parameters:
+  app_name:
+    type: string
+    default: "dory"
+
+orbs:
+  aws-cli: circleci/aws-cli@2.0
+  helm: circleci/helm@1.2.0
+
+jobs:
+  test:
+    docker:
+      - image: circleci/elixir:1.12.3
+      - image: circleci/rabbitmq:3.6.6
+      - image: circleci/postgres:10.6
+        environment:
+          POSTGRES_USER: postgres
+
+    working_directory: ~/dory
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+      - restore_cache:
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
+
+      - run:
+          name: Install hex / rebar / dependencies
+          command: |
+            mix local.hex --force
+            mix local.rebar --force
+            mix hex.organization auth shore_gmbh --key F\${HEXPM_API_KEY}
+            mix deps.get
+            mix deps.compile
+            mix compile
+            MIX_ENV=test mix compile
+
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+          paths: ["deps"]
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}
+          paths: ["deps"]
+      - save_cache:
+          key: v1-mix-cache
+          paths: ["deps"]
+      - save_cache:
+          key: v1-build-cache-{{ .Branch }}
+          paths:
+            - _build
+            - ~/.mix
+      - save_cache:
+          key: v1-build-cache
+          paths:
+            - _build
+            - ~/.mix
+
+      - run:
+          name: Run format checker
+          command: mix format --check-formatted
+
+      - run:
+          name: Run credo
+          command: mix credo -c .credo.exs --strict
+
+      - run:
+          name: Run tests
+          environment:
+            DATABASE_URL: "postgres://postgres@localhost:5432/dory_test"
+            RABBITMQ_URL: "amqp://guest:guest@localhost"
+          command: mix test
+
+  deploy:
+    parameters:
+      env:
+        type: string
+      iam_role:
+        type: string
+      
+    machine:
+      image: circleci/classic:latest
+
+    working_directory: ~/dory
+
+    steps:
+      - checkout
+      - run:
+          command: |
+              AWS_CLI_PATH=\$(which aws)
+              if [ -n "\$AWS_CLI_PATH" ]; then
+                  EXISTING_AWS_VERSION=\$(aws --version)
+                  echo "Uninstalling \${EXISTING_AWS_VERSION}"
+                  # shellcheck disable=SC2012
+                  if [ -L "\$AWS_CLI_PATH" ]; then
+                      AWS_SYMLINK_PATH=\$(ls -l "\$AWS_CLI_PATH" | sed -e 's/.* -> //')
+                  fi
+                  sudo rm -rf "\$AWS_CLI_PATH" "\$AWS_SYMLINK_PATH" "\$HOME/.aws/" "/usr/local/bin/aws" "/usr/local/bin/aws_completer" "/usr/local/aws-cli"
+              else
+                  echo "No AWS install found"
+              fi
+          name: Uninstall AWS CLI V1
+      - aws-cli/install
+      - helm/install-helm-client:
+          version: v3.7.0
+      - run:
+          command: |
+             aws configure set aws_access_key_id \${AWS_ACCESS_KEY}
+             aws configure set aws_secret_access_key \${AWS_SECRET_ACCESS_KEY}
+             aws configure set default.region \${AWS_DEFAULT_REGION}
+          name: Configure AWS access
+      - run:
+          command: |
+             aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${AWS_ECR_ACCOUNT_URL}
+             aws ecr describe-repositories --repository-names << pipeline.parameters.app_name >> || aws ecr create-repository --repository-name << pipeline.parameters.app_name >>
+             docker build --build-arg HEXPM_API_KEY=\${HEXPM_API_KEY} . -t "<< pipeline.parameters.app_name >>:\${CIRCLE_BRANCH}-\${CIRCLE_SHA1}"
+             docker tag "<< pipeline.parameters.app_name >>:\${CIRCLE_BRANCH}-\${CIRCLE_SHA1}" "\${AWS_ECR_ACCOUNT_URL}/<< pipeline.parameters.app_name >>:\${CIRCLE_BRANCH}-\${CIRCLE_SHA1}"
+             docker push "\${AWS_ECR_ACCOUNT_URL}/<< pipeline.parameters.app_name >>:\${CIRCLE_BRANCH}-\${CIRCLE_SHA1}"
+          name: Build and push docker image to ECR
+      - run:
+          command: |
+              aws eks --region eu-central-1 update-kubeconfig --name << parameters.env >> --role arn:aws:iam::448433501390:role/<< parameters.iam_role >> --alias << parameters.env >>
+              cd helm/ && helm upgrade -f values_<< parameters.env >>.yaml << pipeline.parameters.app_name >> . --install --namespace shore --set image.tag="\${CIRCLE_BRANCH}-\${CIRCLE_SHA1}"
+          name: Deploy
+
+workflows:
+  version: 2
+  test_build_and_deploy:
+    jobs:
+      - test:
+          context:
+            - hex-auth
+          name: Test
+      - confirm_staging:
+          type: approval
+          requires:
+            - Test
+          filters:
+            branches:
+              ignore: master
+      - deploy:
+          env: "staging"
+          iam_role: staging-cluster-admin-users
+          context:
+            - aws
+            - hex-auth
+          name: Deploy to staging
+          requires:
+            - confirm_staging
+          filters:
+            branches:
+              ignore: master
+      - deploy:
+          env: "prod"
+          iam_role: prod-cluster-admin-users
+          context:
+            - aws
+            - hex-auth
+          name: Auto deploy to production
+          requires:
+            - Test
+          filters:
+            branches:
+              only: master

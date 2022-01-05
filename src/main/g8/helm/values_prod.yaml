@@ -1,0 +1,82 @@
+replicaCount: 1
+
+image:
+  repository: 448433501390.dkr.ecr.eu-central-1.amazonaws.com/dory
+  pullPolicy: Always
+
+nameOverride: "dory"
+fullnameOverride: "dory"
+
+rollingUpdate:
+  maxSurge: 1
+  maxUnavailable: 0
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "dory"
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 4000
+
+ingress:
+  enabled: false
+
+application:
+  envs:
+    DD_ENV: production
+    APP_ENVIRONMENT: prod
+    PORT: 4000
+    SHORE_API_BASE_URI: http://api-router
+  secrets:
+    DATABASE_URL: databaseUrl
+    SECRET_KEY_BASE: secretKeyBase
+    SENTRY_URL: sentryUrl
+  globalSecrets:
+    SHORE_TOKEN_SECRET: SHORE_TOKEN_SECRET
+    RABBITMQ_URL: RABBITMQ_URL
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 4000
+    initialDelaySeconds: 60
+    periodSeconds: 3
+    timeoutSeconds: 10
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 4000
+    initialDelaySeconds: 60
+    periodSeconds: 3
+    timeoutSeconds: 10
+  resources:
+    limits:
+      cpu: 300m
+      memory: 1Gi
+    requests:
+      cpu: 300m
+      memory: 1Gi
+  pre_upgrade_job:
+    cmd: /home/elixir/app/bin/dory eval "Dory.ReleaseTasks.migrate()"
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 40
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

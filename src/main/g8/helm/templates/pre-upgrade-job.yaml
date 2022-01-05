@@ -1,0 +1,83 @@
+{{- \$uniqid := randAlphaNum 5 | lower -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "dory.fullname" . }}-{{ \$uniqid }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dory.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "dory.fullname" . }}
+        {{- include "dory.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["/bin/sh", "-c", {{ .Values.application.pre_upgrade_job.cmd | quote }}]
+        {{- if .Values.application.livenessProbe }}
+        livenessProbe:
+          {{- toYaml .Values.application.livenessProbe | nindent 12 }}
+        {{- end }}
+        {{- if .Values.application.readinessProbe }}
+        readinessProbe:
+          {{- toYaml .Values.application.readinessProbe | nindent 12 }}
+        {{- end }}
+        ports:
+          - containerPort: 80
+        env:
+          - name: DD_SERVICE
+            value: {{ include "dory.fullname" . }}
+          - name: DD_VERSION
+            value: {{ .Values.image.tag }}
+        {{- range \$key, \$val := .Values.application.envs }}
+          - name: {{ \$key }}
+            value: {{ \$val | quote }}
+        {{- end }}
+        {{- range \$key, \$val := .Values.application.secrets }}
+          - name: {{ \$key }}
+            valueFrom:
+              secretKeyRef:
+                name: dory
+                key: {{ \$val | quote }}
+        {{- end }}
+        {{- range \$key, \$val := .Values.application.globalSecrets }}
+          - name: {{ \$key }}
+            valueFrom:
+              secretKeyRef:
+                name: global-secrets
+                key: {{ \$val | quote }}
+        {{- end }}
+
+        resources:
+          limits:
+            cpu: {{ .Values.application.resources.limits.cpu }}
+            memory: {{ .Values.application.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.application.resources.requests.cpu }}
+            memory: {{ .Values.application.resources.requests.memory }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

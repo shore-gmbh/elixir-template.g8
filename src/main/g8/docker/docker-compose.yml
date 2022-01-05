@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ..
+      args:
+        MIX_ENV: prod
+        HEXPM_API_KEY: 2c95ea39a23c9fc5bc4379246b0004e6
+    ports:
+      - "127.0.0.1:4000:4000"
+    environment:
+      SHORE_API_BASE_URI: https://staging.shore.com
+      SECRET_KEY_BASE: asdasdasdhajsdhjasdhjasdhjasdhaj
+      DATABASE_URL: postgres://postgres:dory@dory-db:5432/postgres
+      RABBITMQ_URL: amqp://dory-rabbitmq
+      SHORE_TOKEN_SECRET: asdasdasdasdasdasdds
+    networks:
+      - host
+    depends_on:
+      - dory-db
+      - dory-rabbitmq
+
+  dory-db:
+    image: postgres:12.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dory
+      POSTGRES_DB: dory
+    restart: always
+    volumes:
+      - dory-db-data:/var/lib/postgresql/data
+    networks:
+      - host
+  
+  dory-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - dory-rabbitmq-data:/var/lib/rabbitmq/
+    networks:
+        - host
+
+volumes:
+  dory-db-data:
+  dory-rabbitmq-data:
+
+networks:
+  host:
