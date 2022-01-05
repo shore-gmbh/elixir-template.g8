@@ -26,7 +26,7 @@ mix local.rebar --force
 # authenticate your terminal to be able to download our library.
 # you need to ask someone for the "HEXPM_API_KEY" and replace it
 # in this command below
-mix hex.organization auth shore_gmbh --key $HEXPM_API_KEY
+mix hex.organization auth shore_gmbh --key \$HEXPM_API_KEY
 
 # install dependencies
 mix deps.get
