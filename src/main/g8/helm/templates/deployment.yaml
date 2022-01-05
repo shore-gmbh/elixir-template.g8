@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dory.fullname" . }}
+  name: {{ include "$name$.fullname" . }}
   labels:
-    {{- include "dory.labels" . | nindent 4 }}
+    {{- include "$name$.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "dory.selectorLabels" . | nindent 6 }}
+      {{- include "$name$.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -23,10 +23,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "dory.fullname" . }}
-        {{- include "dory.selectorLabels" . | nindent 8 }}
+        app: {{ include "$name$.fullname" . }}
+        {{- include "$name$.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "dory.serviceAccountName" . }}
+      serviceAccountName: {{ include "$name$.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -59,7 +59,7 @@ spec:
                   apiVersion: v1
                   fieldPath: status.hostIP
             - name: DD_SERVICE
-              value: {{ include "dory.fullname" . }}
+              value: {{ include "$name$.fullname" . }}
             - name: DD_VERSION
               value: {{ .Values.image.tag }}
           {{- range \$key, \$val := .Values.application.envs }}
@@ -70,7 +70,7 @@ spec:
             - name: {{ \$key }}
               valueFrom:
                 secretKeyRef:
-                  name: dory
+                  name: $name$
                   key: {{ \$val | quote }}
           {{- end }}
           {{- range \$key, \$val := .Values.application.globalSecrets }}

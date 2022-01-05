@@ -1,6 +1,6 @@
-defmodule Dory do
+defmodule $name;format="word-space,Camel"$ do
   @moduledoc """
-  Dory keeps the contexts that define your domain
+  $name;format="word-space,Camel"$ keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

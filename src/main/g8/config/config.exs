@@ -7,14 +7,14 @@
 # General application configuration
 import Config
 
-config :dory,
-  ecto_repos: [Dory.Repo]
+config :"$name$",
+  ecto_repos: [$name;format="word-space,Camel"$.Repo]
 
 # Configures the endpoint
-config :dory, DoryWeb.Endpoint,
+config :"$name$", $name;format="word-space,Camel"$Web.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: DoryWeb.ErrorView, accepts: ~w(json), layout: false],
-  pubsub_server: Dory.PubSub,
+  render_errors: [view: $name;format="word-space,Camel"$Web.ErrorView, accepts: ~w(json), layout: false],
+  pubsub_server: $name;format="word-space,Camel"$.PubSub,
   live_view: [signing_salt: "SHy07qz3"]
 
 # Configures Elixir's Logger
@@ -34,11 +34,11 @@ config :tesla,
   retry_delay: 2000
 
 config :spandex_tesla,
-  service: :"dory-tesla",
+  service: :"$name$-tesla",
   tracer: ShoreService.Tracer
 
 config :spandex_ecto, SpandexEcto.EctoLogger,
-  service: :"dory-postgres",
+  service: :"$name$-postgres",
   tracer: ShoreService.Tracer
 
 config :spandex_phoenix, tracer: ShoreService.Tracer

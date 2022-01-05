@@ -1,5 +1,5 @@
-defmodule DoryWeb.ErrorView do
-  use DoryWeb, :view
+defmodule $name;format="word-space,Camel"$Web.ErrorView do
+  use $name;format="word-space,Camel"$Web, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

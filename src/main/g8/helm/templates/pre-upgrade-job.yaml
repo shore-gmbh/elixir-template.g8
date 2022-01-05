@@ -2,10 +2,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "dory.fullname" . }}-{{ \$uniqid }}
+  name: {{ include "$name$.fullname" . }}-{{ \$uniqid }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "dory.labels" . | nindent 4 }}
+    {{- include "$name$.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
@@ -18,8 +18,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "dory.fullname" . }}
-        {{- include "dory.selectorLabels" . | nindent 8 }}
+        app: {{ include "$name$.fullname" . }}
+        {{- include "$name$.selectorLabels" . | nindent 8 }}
     spec:
       restartPolicy: Never
       containers:
@@ -39,7 +39,7 @@ spec:
           - containerPort: 80
         env:
           - name: DD_SERVICE
-            value: {{ include "dory.fullname" . }}
+            value: {{ include "$name$.fullname" . }}
           - name: DD_VERSION
             value: {{ .Values.image.tag }}
         {{- range \$key, \$val := .Values.application.envs }}
@@ -50,7 +50,7 @@ spec:
           - name: {{ \$key }}
             valueFrom:
               secretKeyRef:
-                name: dory
+                name: $name$
                 key: {{ \$val | quote }}
         {{- end }}
         {{- range \$key, \$val := .Values.application.globalSecrets }}

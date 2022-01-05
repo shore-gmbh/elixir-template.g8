@@ -1,4 +1,4 @@
-defmodule Dory.ReleaseTasks do
+defmodule $name;format="word-space,Camel"$.ReleaseTasks do
   @moduledoc """
   Running migrations for all repos.
   """
@@ -14,9 +14,9 @@ defmodule Dory.ReleaseTasks do
     :ecto_sql
   ]
 
-  @repos Application.compile_env(:dory, :ecto_repos, [])
+  @repos Application.compile_env(:"$name$", :ecto_repos, [])
 
-  def migrate(args \\ []) do
+  def migrate(args \\\ []) do
     {:ok, _} = Application.ensure_all_started(:logger)
     Logger.info("[task] running migrate")
     start_repo()
@@ -35,7 +35,7 @@ defmodule Dory.ReleaseTasks do
     end)
 
     IO.puts("Starting repos...")
-    Application.load(:dory)
+    Application.load(:"$name$")
 
     Enum.each(@repos, fn repo ->
       {:ok, _} = repo.start_link(pool_size: 2)

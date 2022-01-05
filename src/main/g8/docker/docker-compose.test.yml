@@ -1,31 +1,20 @@
 version: '3'
 
 services:
-  dory-test-db:
+  $name$-test-db:
     image: postgres:12.3
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: dory_test
+      POSTGRES_DB: $name$_test
     restart: always
     volumes:
-      - dory-test-db-data:/var/lib/postgresql/data
+      - $name$-test-db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-  dory-rabbitmq:
-    image: rabbitmq:3-management-alpine
-    ports:
-        - 5672:5672
-        - 15672:15672
-    volumes:
-        - dory-rabbitmq-data:/var/lib/rabbitmq/
-    networks:
-        - host
-
 volumes:
-  dory-test-db-data:
-  dory-rabbitmq-data:
+  $name$-test-db-data:
 
 networks:
   host:

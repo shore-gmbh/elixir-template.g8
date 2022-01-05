@@ -1,8 +1,6 @@
-# Dory
+# $name;format="word-space,Camel"$
 
-![Dory of Finding Nemo](https://static.wikia.nocookie.net/disney/images/3/36/Profile_-_Dory.png/revision/latest?cb=20190316200551)
-
-Service responsible for continuing to create recurring appointments on core
+Some description
 
 ## Prerequisites
 
@@ -17,7 +15,7 @@ You can use [asdf](https://asdf-vm.com/) to install these dependencies in your e
 
 ```shell
 # clone this repository
-git clone git@github.com:shore-gmbh/dory.git
+git clone git@github.com:shore-gmbh/$name$.git
 
 # install hex + rebar
 mix local.hex --force
@@ -48,7 +46,7 @@ http://localhost:4000/health
 
 ```shell
 # clone this repository
-git clone git@github.com:shore-gmbh/dory.git
+git clone git@github.com:shore-gmbh/$name$.git
 
 # run the docker-compose
 docker-compose -f docker/docker-compose.yml up -d

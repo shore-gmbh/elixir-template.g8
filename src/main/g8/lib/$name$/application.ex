@@ -1,4 +1,4 @@
-defmodule Dory.Application do
+defmodule $name;format="word-space,Camel"$.Application do
   @moduledoc false
 
   use Application
@@ -7,26 +7,20 @@ defmodule Dory.Application do
   def start(_type, _args) do
     Logger.add_backend(Sentry.LoggerBackend)
 
-    ShoreService.Telemetry.install(:dory)
+    ShoreService.Telemetry.install(:"$name$")
 
     children = [
       # Start the Ecto repository
-      Dory.Repo,
+      $name;format="word-space,Camel"$.Repo,
       # Start the Telemetry supervisor
-      DoryWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Dory.PubSub},
+      $name;format="word-space,Camel"$Web.Telemetry,
       # Start the Endpoint (http/https)
-      DoryWeb.Endpoint,
-      Dory.Consumers,
-      %{id: Dory.Publisher, start: {Dory.Publisher, :start_link, []}}
-      # Start a worker by calling: Dory.Worker.start_link(arg)
-      # {Dory.Worker, arg}
+      $name;format="word-space,Camel"$Web.Endpoint,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Dory.Supervisor]
+    opts = [strategy: :one_for_one, name: $name;format="word-space,Camel"$.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
@@ -34,7 +28,7 @@ defmodule Dory.Application do
   # whenever the application is updated.
   @impl true
   def config_change(changed, _new, removed) do
-    DoryWeb.Endpoint.config_change(changed, removed)
+    $name;format="word-space,Camel"$Web.Endpoint.config_change(changed, removed)
     :ok
   end
 end

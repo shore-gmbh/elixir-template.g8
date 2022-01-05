@@ -1,11 +1,11 @@
 replicaCount: 1
 
 image:
-  repository: 448433501390.dkr.ecr.eu-central-1.amazonaws.com/dory
+  repository: 448433501390.dkr.ecr.eu-central-1.amazonaws.com/$name$
   pullPolicy: Always
 
-nameOverride: "dory"
-fullnameOverride: "dory"
+nameOverride: "$name$"
+fullnameOverride: "$name$"
 
 rollingUpdate:
   maxSurge: 1
@@ -14,7 +14,7 @@ rollingUpdate:
 serviceAccount:
   create: true
   annotations: {}
-  name: "dory"
+  name: "$name$"
 
 podAnnotations: {}
 
@@ -43,7 +43,6 @@ application:
     SENTRY_URL: sentryUrl
   globalSecrets:
     SHORE_TOKEN_SECRET: SHORE_TOKEN_SECRET
-    RABBITMQ_URL: RABBITMQ_URL
   readinessProbe:
     httpGet:
       path: /health
@@ -66,7 +65,7 @@ application:
       cpu: 300m
       memory: 1Gi
   pre_upgrade_job:
-    cmd: /home/elixir/app/bin/dory eval "Dory.ReleaseTasks.migrate()"
+    cmd: /home/elixir/app/bin/$name$ eval "$name;format="word-space,Camel"$.ReleaseTasks.migrate()"
 
 autoscaling:
   enabled: true

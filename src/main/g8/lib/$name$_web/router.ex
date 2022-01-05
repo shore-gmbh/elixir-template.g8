@@ -1,5 +1,5 @@
-defmodule DoryWeb.Router do
-  use DoryWeb, :router
+defmodule $name;format="word-space,Camel"$Web.Router do
+  use $name;format="word-space,Camel"$Web, :router
 
   forward "/health", ShoreService.Plugs.Health
 
@@ -7,7 +7,7 @@ defmodule DoryWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", DoryWeb do
+  scope "/api", $name;format="word-space,Camel"$Web do
     pipe_through :api
   end
 
@@ -23,7 +23,7 @@ defmodule DoryWeb.Router do
 
     scope "/" do
       pipe_through [:fetch_session, :protect_from_forgery]
-      live_dashboard "/dashboard", metrics: DoryWeb.Telemetry
+      live_dashboard "/dashboard", metrics: $name;format="word-space,Camel"$Web.Telemetry
     end
   end
 end

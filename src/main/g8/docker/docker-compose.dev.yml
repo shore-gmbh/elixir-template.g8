@@ -1,31 +1,20 @@
 version: '3'
 
 services:
-  dory-dev-db:
+  $name$-dev-db:
     image: postgres:12.3
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: dory_dev
+      POSTGRES_DB: $name$_dev
     restart: always
     volumes:
-      - dory-dev-db-data:/var/lib/postgresql/data
+      - $name$-dev-db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-  dory-rabbitmq:
-    image: rabbitmq:3-management-alpine
-    ports:
-        - 5672:5672
-        - 15672:15672
-    volumes:
-        - dory-rabbitmq-data:/var/lib/rabbitmq/
-    networks:
-        - host
-
 volumes:
-  dory-dev-db-data:
-  dory-rabbitmq-data:
+  $name$-dev-db-data:
 
 networks:
   host:

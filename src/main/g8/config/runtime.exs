@@ -14,9 +14,9 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  config :dory, :rabbitmq_url, System.fetch_env!("RABBITMQ_URL")
+  config :"$name$", :rabbitmq_url, System.fetch_env!("RABBITMQ_URL")
 
-  config :dory, Dory.Repo,
+  config :"$name$", $name;format="word-space,Camel"$.Repo,
     # ssl: true,
     # socket_options: [:inet6],
     url: database_url,
@@ -34,7 +34,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  config :dory, DoryWeb.Endpoint,
+  config :"$name$", $name;format="word-space,Camel"$Web.Endpoint,
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
@@ -58,7 +58,7 @@ config :sentry,
 
 config :shore_service, ShoreService.Tracer,
   adapter: SpandexDatadog.Adapter,
-  service: :"dory-phoenix",
+  service: :"$name$-phoenix",
   disabled?: false,
   env: System.get_env("APP_ENVIRONMENT", "development")
 

@@ -1,9 +1,9 @@
-defmodule Dory.MixProject do
+defmodule $name;format="word-space,Camel"$.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :dory,
+      app: :"$name$",
       version: "0.1.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Dory.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Dory.Application, []},
+      mod: {$name;format="word-space,Camel"$.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -45,8 +45,6 @@ defmodule Dory.MixProject do
       {:shore_service, "0.4.5", organization: "shore_gmbh"},
       {:logger_json, "~> 4.3"},
       {:recurrencex, "~> 0.2.1"},
-      {:gen_rmq, "~> 3.0.0"},
-      {:amqp, "~> 3.0.0", override: true},
       {:telemetry, "~> 1.0.0", override: true},
       {:sentry, "~> 8.0"},
       {:hackney, "~> 1.8"},

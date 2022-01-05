@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   app_name:
     type: string
-    default: "dory"
+    default: "$name$"
 
 orbs:
   aws-cli: circleci/aws-cli@2.0
@@ -18,7 +18,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
 
-    working_directory: ~/dory
+    working_directory: ~/$name$
     steps:
       - checkout
 
@@ -74,7 +74,7 @@ jobs:
       - run:
           name: Run tests
           environment:
-            DATABASE_URL: "postgres://postgres@localhost:5432/dory_test"
+            DATABASE_URL: "postgres://postgres@localhost:5432/$name$_test"
             RABBITMQ_URL: "amqp://guest:guest@localhost"
           command: mix test
 
@@ -88,7 +88,7 @@ jobs:
     machine:
       image: circleci/classic:latest
 
-    working_directory: ~/dory
+    working_directory: ~/$name$
 
     steps:
       - checkout

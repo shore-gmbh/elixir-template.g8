@@ -1,4 +1,4 @@
-defmodule DoryWeb.ErrorHelpers do
+defmodule $name;format="word-space,Camel"$Web.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """

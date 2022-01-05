@@ -1,12 +1,12 @@
-defmodule DoryWeb do
+defmodule $name;format="word-space,Camel"$Web do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use DoryWeb, :controller
-      use DoryWeb, :view
+      use $name;format="word-space,Camel"$Web, :controller
+      use $name;format="word-space,Camel"$Web, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,18 +19,18 @@ defmodule DoryWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: DoryWeb
+      use Phoenix.Controller, namespace: $name;format="word-space,Camel"$Web
 
       import Plug.Conn
-      alias DoryWeb.Router.Helpers, as: Routes
+      alias $name;format="word-space,Camel"$Web.Router.Helpers, as: Routes
     end
   end
 
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/dory_web/templates",
-        namespace: DoryWeb
+        root: "lib/$name$_web/templates",
+        namespace: $name;format="word-space,Camel"$Web
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -61,8 +61,8 @@ defmodule DoryWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import DoryWeb.ErrorHelpers
-      alias DoryWeb.Router.Helpers, as: Routes
+      import $name;format="word-space,Camel"$Web.ErrorHelpers
+      alias $name;format="word-space,Camel"$Web.Router.Helpers, as: Routes
     end
   end
 

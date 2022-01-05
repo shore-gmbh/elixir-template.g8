@@ -5,7 +5,7 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     Dory.Repo.insert!(%Dory.SomeSchema{})
+#     $name;format="word-space,Camel"$.Repo.insert!(%$name;format="word-space,Camel"$.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.

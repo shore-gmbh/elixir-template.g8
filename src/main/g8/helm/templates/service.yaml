@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "dory.fullname" . }}
+  name: {{ include "$name$.fullname" . }}
   labels:
-    {{- include "dory.labels" . | nindent 4 }}
+    {{- include "$name$.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       port: {{ .Values.service.externalPort }}
       targetPort: {{ .Values.service.internalPort }}
   selector:
-    app: {{ include "dory.fullname" . }}
+    app: {{ include "$name$.fullname" . }}
