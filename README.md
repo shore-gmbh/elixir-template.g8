@@ -14,7 +14,7 @@ Create just typing:
 g8 shore-gmbh/elixir-template.g8
 ```
 - Type the name of the project
-- Run locally using the README instruction of the project generated
+- Run locally using the README instructions of the generated project
 - Upload to github
 
 ### Setup on Kubernetes (WIP)
