@@ -1,6 +1,6 @@
 # Elixir Giter8 Template
 
-The template to be used to generate projects in Elixir at Shore using [Giter8][g8]!
+The template to be used to generate projects in Elixir at Shore using [Giter8](http://www.foundweekends.org/giter8/)!
 
 This template has a project with just api and database configured
 
