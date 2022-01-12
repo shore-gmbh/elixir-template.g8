@@ -86,7 +86,7 @@ jobs:
         type: string
       
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202008-01
 
     working_directory: ~/$name$
 
