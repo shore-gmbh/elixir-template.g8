@@ -3,7 +3,7 @@ defmodule $name;format="word-space,Camel"$.MixProject do
 
   def project do
     [
-      app: :$name,
+      app: :$name$,
       version: "0.1.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),

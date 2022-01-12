@@ -7,7 +7,7 @@ defmodule $name;format="word-space,Camel"$.Application do
   def start(_type, _args) do
     Logger.add_backend(Sentry.LoggerBackend)
 
-    ShoreService.Telemetry.install(:$name)
+    ShoreService.Telemetry.install(:$name$)
 
     children = [
       # Start the Ecto repository

@@ -1,6 +1,6 @@
 defmodule $name;format="word-space,Camel"$Web.Endpoint do
   use Sentry.PlugCapture
-  use Phoenix.Endpoint, otp_app: :$name
+  use Phoenix.Endpoint, otp_app: :$name$
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -17,7 +17,7 @@ defmodule $name;format="word-space,Camel"$Web.Endpoint do
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :$name
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :$name$
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,

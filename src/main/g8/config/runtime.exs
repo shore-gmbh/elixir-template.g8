@@ -14,9 +14,9 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  config :$name, :rabbitmq_url, System.fetch_env!("RABBITMQ_URL")
+  config :$name$, :rabbitmq_url, System.fetch_env!("RABBITMQ_URL")
 
-  config :$name, $name;format="word-space,Camel"$.Repo,
+  config :$name$, $name;format="word-space,Camel"$.Repo,
     # ssl: true,
     # socket_options: [:inet6],
     url: database_url,
@@ -34,7 +34,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  config :$name, $name;format="word-space,Camel"$Web.Endpoint,
+  config :$name$, $name;format="word-space,Camel"$Web.Endpoint,
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.

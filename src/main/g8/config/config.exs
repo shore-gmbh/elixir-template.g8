@@ -7,11 +7,11 @@
 # General application configuration
 import Config
 
-config :$name,
+config :$name$,
   ecto_repos: [$name;format="word-space,Camel"$.Repo]
 
 # Configures the endpoint
-config :$name, $name;format="word-space,Camel"$Web.Endpoint,
+config :$name$, $name;format="word-space,Camel"$Web.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: $name;format="word-space,Camel"$Web.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: $name;format="word-space,Camel"$.PubSub,
