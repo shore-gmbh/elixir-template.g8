@@ -1,10 +1,5 @@
 version: 2.1
 
-parameters:
-  app_name:
-    type: string
-    default: "elixir-template"
-
 jobs:
   test:
     docker:
@@ -31,7 +26,7 @@ jobs:
       - run:
           name: Create application
           command: |
-            bin/g8 file://../elixir-template.g8 --name=my_app --include_database=no
+            bin/g8 file:///home/circleci/elixir-template/elixir-template.g8 --name=my_app --include_database=no
 
 workflows:
   version: 2
