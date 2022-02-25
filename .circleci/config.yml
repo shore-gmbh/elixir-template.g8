@@ -17,8 +17,9 @@ jobs:
       - run:
           name: Install Giter8
           command: |
-            sudo curl https://repo1.maven.org/maven2/org/foundweekends/giter8/giter8-bootstrap_2.12/0.13.1/giter8-bootstrap_2.12-0.13.1.sh > /usr/local/bin/g8
-            sudo chmod +x usr/local/bin/g8
+            mkdir bin
+            curl https://repo1.maven.org/maven2/org/foundweekends/giter8/giter8-bootstrap_2.12/0.13.1/giter8-bootstrap_2.12-0.13.1.sh > bin/g8
+            sudo chmod +x bin/g8
             sudo g8
 
       - run:
