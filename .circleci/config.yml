@@ -15,6 +15,12 @@ jobs:
       - checkout
 
       - run:
+          name: Install Java
+          command: |
+            sudo apt update
+            sudo apt install default-jre
+
+      - run:
           name: Install Giter8
           command: |
             mkdir bin
