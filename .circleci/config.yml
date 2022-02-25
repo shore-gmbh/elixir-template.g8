@@ -26,6 +26,7 @@ jobs:
       - run:
           name: Create application
           command: |
+            ls
             bin/g8 file:///home/circleci/elixir-template/elixir-template.g8 --name=my_app --include_database=no
 
 workflows:
