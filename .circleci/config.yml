@@ -19,14 +19,14 @@ jobs:
           name: Install Giter8
           command: |
             mkdir bin
-            curl https://repo1.maven.org/maven2/org/foundweekends/giter8/giter8-bootstrap_2.12/0.13.1/giter8-bootstrap_2.12-0.13.1.sh > usr/bin/g8
-            chmod +x usr/bin/g8
-            usr/bin/g8 --help
+            curl https://repo1.maven.org/maven2/org/foundweekends/giter8/giter8-bootstrap_2.12/0.13.1/giter8-bootstrap_2.12-0.13.1.sh > bin/g8
+            chmod +x bin/g8
+            bin/g8 --help
 
       - run:
           name: Create application
           command: |
-            usr/bin/g8 file:///home/circleci/elixir-template.g8 --name=my_app --include_database=no
+            /home/circleci/elixir-template.g8/bin/g8 file:///home/circleci/elixir-template.g8 --name=my_app --include_database=no
 
 workflows:
   version: 2
