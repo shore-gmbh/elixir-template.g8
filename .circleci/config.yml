@@ -32,7 +32,8 @@ jobs:
           name: Create application
           command: |
             cd ..
-            g8 file://./elixir-template.g8 --name=my_app --include_database=no
+            echo $PWD
+            bin/g8 file://./elixir-template.g8 --name=my_app --include_database=no
 
 workflows:
   version: 2
