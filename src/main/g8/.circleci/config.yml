@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   app_name:
     type: string
-    default: "$name$"
+    default: "$name;format="word-space,hyphenate"$"
 
 orbs:
   aws-cli: circleci/aws-cli@2.0
@@ -38,7 +38,7 @@ jobs:
           command: |
             mix local.hex --force
             mix local.rebar --force
-            mix hex.organization auth shore_gmbh --key F\${HEXPM_API_KEY}
+            mix hex.organization auth shore_gmbh --key \${HEXPM_API_KEY}
             mix deps.get
             mix deps.compile
             mix compile
