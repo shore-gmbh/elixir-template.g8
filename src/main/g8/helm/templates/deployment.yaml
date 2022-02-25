@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "$name$.fullname" . }}
+  name: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}
   labels:
-    {{- include "$name$.labels" . | nindent 4 }}
+    {{- include "$name;format="word-space,hyphenate"$.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "$name$.selectorLabels" . | nindent 6 }}
+      {{- include "$name;format="word-space,hyphenate"$.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -23,10 +23,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "$name$.fullname" . }}
-        {{- include "$name$.selectorLabels" . | nindent 8 }}
+        app: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}
+        {{- include "$name;format="word-space,hyphenate"$.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "$name$.serviceAccountName" . }}
+      serviceAccountName: {{ include "$name;format="word-space,hyphenate"$.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -59,7 +59,7 @@ spec:
                   apiVersion: v1
                   fieldPath: status.hostIP
             - name: DD_SERVICE
-              value: {{ include "$name$.fullname" . }}
+              value: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}
             - name: DD_VERSION
               value: {{ .Values.image.tag }}
           {{- range \$key, \$val := .Values.application.envs }}
@@ -70,7 +70,7 @@ spec:
             - name: {{ \$key }}
               valueFrom:
                 secretKeyRef:
-                  name: $name$
+                  name: $name;format="word-space,hyphenate"$
                   key: {{ \$val | quote }}
           {{- end }}
           {{- range \$key, \$val := .Values.application.globalSecrets }}

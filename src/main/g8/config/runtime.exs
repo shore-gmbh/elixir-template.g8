@@ -7,6 +7,7 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 if config_env() == :prod do
+$if(include_database.truthy)$
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
@@ -14,13 +15,12 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  config :$name$, :rabbitmq_url, System.fetch_env!("RABBITMQ_URL")
-
   config :$name$, $name;format="word-space,Camel"$.Repo,
     # ssl: true,
     # socket_options: [:inet6],
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+$endif$
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you

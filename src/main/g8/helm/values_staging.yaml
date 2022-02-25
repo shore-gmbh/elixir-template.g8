@@ -1,11 +1,11 @@
 replicaCount: 1
 
 image:
-  repository: 448433501390.dkr.ecr.eu-central-1.amazonaws.com/$name$
+  repository: 448433501390.dkr.ecr.eu-central-1.amazonaws.com/$name;format="word-space,hyphenate"$
   pullPolicy: Always
 
-nameOverride: "$name$"
-fullnameOverride: "$name$"
+nameOverride: "$name;format="word-space,hyphenate"$"
+fullnameOverride: "$name;format="word-space,hyphenate"$"
 
 rollingUpdate:
   maxSurge: 1
@@ -14,7 +14,7 @@ rollingUpdate:
 serviceAccount:
   create: true
   annotations: {}
-  name: "$name$"
+  name: "$name;format="word-space,hyphenate"$"
 
 podAnnotations: {}
 
@@ -38,7 +38,9 @@ application:
     PORT: 4000
     SHORE_API_BASE_URI: http://api-router
   secrets:
+    $if(include_database.truthy)$
     DATABASE_URL: databaseUrl
+    $endif$
     SECRET_KEY_BASE: secretKeyBase
     SENTRY_URL: sentryUrl
   globalSecrets:
@@ -64,14 +66,16 @@ application:
     requests:
       cpu: 300m
       memory: 1Gi
+  $if(include_database.truthy)$
   pre_upgrade_job:
-    cmd: /home/elixir/app/bin/$name$ eval "$name;format="word-space,Camel"$.ReleaseTasks.migrate()"
+    cmd: /home/elixir/app/bin/$name$ eval "$name$.ReleaseTasks.migrate()"
+  $endif$
 
 autoscaling:
   enabled: true
   minReplicas: 1
   maxReplicas: 2
-  targetCPUUtilizationPercentage: 40
+  targetCPUUtilizationPercentage: 70
   targetMemoryUtilizationPercentage: 70
 
 nodeSelector: {}

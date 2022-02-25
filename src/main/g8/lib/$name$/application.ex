@@ -10,12 +10,14 @@ defmodule $name;format="word-space,Camel"$.Application do
     ShoreService.Telemetry.install(:$name$)
 
     children = [
+      $if(include_database.truthy)$
       # Start the Ecto repository
       $name;format="word-space,Camel"$.Repo,
+      $endif$
       # Start the Telemetry supervisor
       $name;format="word-space,Camel"$Web.Telemetry,
       # Start the Endpoint (http/https)
-      $name;format="word-space,Camel"$Web.Endpoint,
+      $name;format="word-space,Camel"$Web.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

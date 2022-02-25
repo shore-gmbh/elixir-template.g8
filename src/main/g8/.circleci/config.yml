@@ -13,10 +13,11 @@ jobs:
   test:
     docker:
       - image: circleci/elixir:1.12.3
-      - image: circleci/rabbitmq:3.6.6
+      $if(include_database.truthy)$
       - image: circleci/postgres:10.6
         environment:
           POSTGRES_USER: postgres
+      $endif$
 
     working_directory: ~/$name$
     steps:
@@ -73,9 +74,10 @@ jobs:
 
       - run:
           name: Run tests
-          environment:
-            DATABASE_URL: "postgres://postgres@localhost:5432/$name$_test"
-            RABBITMQ_URL: "amqp://guest:guest@localhost"
+          $if(include_database.truthy)$
+          environment:  
+              DATABASE_URL: "postgres://postgres@localhost:5432/$name$_test"
+          $endif$
           command: mix test
 
   deploy:

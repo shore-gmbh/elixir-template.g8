@@ -7,8 +7,10 @@
 # General application configuration
 import Config
 
+$if(include_database.truthy)$
 config :$name$,
   ecto_repos: [$name;format="word-space,Camel"$.Repo]
+$endif$
 
 # Configures the endpoint
 config :$name$, $name;format="word-space,Camel"$Web.Endpoint,

@@ -1,6 +1,7 @@
 import Config
 
 # Configure your database
+$if(include_database.truthy)$
 config :$name$, $name;format="word-space,Camel"$.Repo,
   username: "postgres",
   password: "postgres",
@@ -8,7 +9,7 @@ config :$name$, $name;format="word-space,Camel"$.Repo,
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
-
+$endif$
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
@@ -48,10 +49,6 @@ config :$name$, $name;format="word-space,Camel"$Web.Endpoint,
 # If desired, both `http:` and `https:` keys can be
 # configured to run both http and https servers on
 # different ports.
-
-config :$name$,
-       :rabbitmq_url,
-       System.get_env("RABBITMQ_URL") || "amqp://guest:guest@localhost:5672"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, level: :info, format: "[\$level] \$message\n"

@@ -2,10 +2,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "$name$.fullname" . }}-{{ \$uniqid }}
+  name: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}-{{ \$uniqid }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "$name$.labels" . | nindent 4 }}
+    {{- include "$name;format="word-space,hyphenate"$.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
@@ -18,8 +18,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "$name$.fullname" . }}
-        {{- include "$name$.selectorLabels" . | nindent 8 }}
+        app: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}
+        {{- include "$name;format="word-space,hyphenate"$.selectorLabels" . | nindent 8 }}
     spec:
       restartPolicy: Never
       containers:
@@ -39,7 +39,7 @@ spec:
           - containerPort: 80
         env:
           - name: DD_SERVICE
-            value: {{ include "$name$.fullname" . }}
+            value: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}
           - name: DD_VERSION
             value: {{ .Values.image.tag }}
         {{- range \$key, \$val := .Values.application.envs }}
@@ -50,7 +50,7 @@ spec:
           - name: {{ \$key }}
             valueFrom:
               secretKeyRef:
-                name: $name$
+                name: $name;format="word-space,hyphenate"$
                 key: {{ \$val | quote }}
         {{- end }}
         {{- range \$key, \$val := .Values.application.globalSecrets }}

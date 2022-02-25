@@ -1,5 +1,5 @@
 apiVersion: v2
-name: $name$
+name: $name;format="word-space,hyphenate"$
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
