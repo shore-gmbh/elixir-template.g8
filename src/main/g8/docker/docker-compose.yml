@@ -12,11 +12,14 @@ services:
     environment:
       SHORE_API_BASE_URI: https://staging.shore.com
       SECRET_KEY_BASE: asdasdasdhajsdhjasdhjasdhjasdhaj
+      $if(include_database.truthy)$
       DATABASE_URL: postgres://postgres:$name$@$name$-db:5432/postgres
+      $endif$
       RABBITMQ_URL: amqp://$name$-rabbitmq
       SHORE_TOKEN_SECRET: asdasdasdasdasdasdds
     networks:
       - host
+$if(include_database.truthy)$
     depends_on:
       - $name$-db
 
@@ -34,6 +37,7 @@ services:
 
 volumes:
   $name$-db-data:
+$endif$
 
 networks:
   host:

@@ -32,8 +32,10 @@ defmodule $name;format="word-space,Camel"$Web.ConnCase do
   end
 
   setup tags do
+$if(include_database.truthy)$
     pid = Ecto.Adapters.SQL.Sandbox.start_owner!($name;format="word-space,Camel"$.Repo, shared: not tags[:async])
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+$endif$
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

@@ -1,0 +1,50 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/elixir:1.12.3
+
+    working_directory: ~/elixir-template.g8
+    steps:
+      - checkout
+
+      - run:
+          name: Install Java
+          command: |
+            sudo apt update
+            sudo apt install default-jre
+
+      - run:
+          name: Install Giter8
+          command: |
+            mkdir bin
+            curl https://repo1.maven.org/maven2/org/foundweekends/giter8/giter8-bootstrap_2.12/0.13.1/giter8-bootstrap_2.12-0.13.1.sh > bin/g8
+            chmod +x bin/g8
+            bin/g8 --help
+
+      - run:
+          name: Create application
+          command: |
+            /home/circleci/elixir-template.g8/bin/g8 file:///home/circleci/elixir-template.g8 --name=my_app --include_database=no
+
+      - run:
+          name: Test application created
+          command: |
+            cd my_app
+            mix local.hex --force
+            mix local.rebar --force
+            mix hex.organization auth shore_gmbh --key ${HEXPM_API_KEY}
+            mix deps.get
+            mix deps.compile
+            mix compile
+            MIX_ENV=test mix compile
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          context:
+            - hex-auth
+          name: Test

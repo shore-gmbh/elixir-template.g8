@@ -35,16 +35,17 @@ defmodule $name;format="word-space,Camel"$.MixProject do
     [
       {:phoenix, "~> 1.6.0"},
       {:phoenix_ecto, "~> 4.4"},
+      $if(include_database.truthy)$
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
+      $endif$
       {:phoenix_live_dashboard, "~> 0.5"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:shore_service, "0.4.5", organization: "shore_gmbh"},
+      {:shore_service, "0.7.0", organization: "shore_gmbh"},
       {:logger_json, "~> 4.3"},
-      {:recurrencex, "~> 0.2.1"},
       {:telemetry, "~> 1.0.0", override: true},
       {:sentry, "~> 8.0"},
       {:hackney, "~> 1.8"},

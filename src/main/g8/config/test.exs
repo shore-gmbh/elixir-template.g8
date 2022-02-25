@@ -5,6 +5,7 @@ import Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
+$if(include_database.truthy)$
 config :$name$, $name;format="word-space,Camel"$.Repo,
   username: "postgres",
   password: "postgres",
@@ -12,6 +13,7 @@ config :$name$, $name;format="word-space,Camel"$.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
+$endif$
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
@@ -22,10 +24,6 @@ config :$name$, $name;format="word-space,Camel"$Web.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
-
-config :$name$,
-       :rabbitmq_url,
-       System.get_env("RABBITMQ_URL") || "amqp://guest:guest@localhost:5672"
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
