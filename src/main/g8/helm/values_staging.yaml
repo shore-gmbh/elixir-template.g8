@@ -36,7 +36,7 @@ application:
     DD_ENV: staging
     APP_ENVIRONMENT: staging
     PORT: 4000
-    SHORE_API_BASE_URI: http://api-router
+    SHORE_API_BASE_URI: http://api-internal
   secrets:
     $if(include_database.truthy)$
     DATABASE_URL: databaseUrl
