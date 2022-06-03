@@ -49,3 +49,8 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
+
+config :cors_plug,
+  origin: "*",
+  max_age: 86400,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]

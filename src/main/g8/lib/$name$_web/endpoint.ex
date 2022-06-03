@@ -38,5 +38,6 @@ defmodule $name;format="word-space,Camel"$Web.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug CORSPlug
   plug $name;format="word-space,Camel"$Web.Router
 end

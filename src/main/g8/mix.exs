@@ -49,6 +49,7 @@ defmodule $name;format="word-space,Camel"$.MixProject do
       {:telemetry, "~> 1.0.0", override: true},
       {:sentry, "~> 8.0"},
       {:hackney, "~> 1.8"},
+      {:cors_plug, "~> 3.0"},
 
       # dev/test
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
