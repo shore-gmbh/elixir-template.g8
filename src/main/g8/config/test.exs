@@ -23,7 +23,7 @@ config :$name$, $name;format="word-space,Camel"$Web.Endpoint,
   server: false
 
 # Print only warnings and errors during test
-config :logger, level: :warn, backends: [:console],
+config :logger, level: :warn, backends: [:console]
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
