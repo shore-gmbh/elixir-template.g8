@@ -9,7 +9,15 @@ import Config
 
 $if(include_database.truthy)$
 config :$name$,
-  ecto_repos: [$name;format="word-space,Camel"$.Repo]
+  ecto_repos: [$name;format="word-space,Camel"$.Repo],
+  generators: [binary_id: true]
+$endif$
+
+$if(include_database.truthy)$
+config :$name$, $name;format="word-space,Camel"$.Repo
+  migration_primary_key: [type: :uuid],
+  migration_foreign_key: [type: :uuid],
+  migration_timestamps: [type: :utc_datetime_usec]
 $endif$
 
 # Configures the endpoint
