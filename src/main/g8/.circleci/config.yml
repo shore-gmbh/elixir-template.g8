@@ -70,7 +70,7 @@ jobs:
 
       - run:
           name: Run credo
-          command: mix credo -c .credo.exs --strict
+          command: mix credo --config-file .credo.exs --strict
 
       - run:
           name: Run tests
