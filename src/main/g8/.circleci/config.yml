@@ -6,7 +6,7 @@ parameters:
     default: "$name;format="word-space,hyphenate"$"
 
 orbs:
-  aws-cli: circleci/aws-cli@2.0
+  aws-cli: circleci/aws-cli@3.0
   helm: circleci/helm@1.2.0
 
 jobs:
@@ -88,36 +88,16 @@ jobs:
         type: string
       
     machine:
-      image: ubuntu-2004:202008-01
+      image: ubuntu-2004:202201-02
 
     working_directory: ~/$name$
 
     steps:
       - checkout
-      - run:
-          command: |
-              AWS_CLI_PATH=\$(which aws)
-              if [ -n "\$AWS_CLI_PATH" ]; then
-                  EXISTING_AWS_VERSION=\$(aws --version)
-                  echo "Uninstalling \${EXISTING_AWS_VERSION}"
-                  # shellcheck disable=SC2012
-                  if [ -L "\$AWS_CLI_PATH" ]; then
-                      AWS_SYMLINK_PATH=\$(ls -l "\$AWS_CLI_PATH" | sed -e 's/.* -> //')
-                  fi
-                  sudo rm -rf "\$AWS_CLI_PATH" "\$AWS_SYMLINK_PATH" "\$HOME/.aws/" "/usr/local/bin/aws" "/usr/local/bin/aws_completer" "/usr/local/aws-cli"
-              else
-                  echo "No AWS install found"
-              fi
-          name: Uninstall AWS CLI V1
-      - aws-cli/install
+      - aws-cli/setup
       - helm/install-helm-client:
           version: v3.7.0
-      - run:
-          command: |
-             aws configure set aws_access_key_id \${AWS_ACCESS_KEY}
-             aws configure set aws_secret_access_key \${AWS_SECRET_ACCESS_KEY}
-             aws configure set default.region \${AWS_DEFAULT_REGION}
-          name: Configure AWS access
+
       - run:
           command: |
              aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${AWS_ECR_ACCOUNT_URL}

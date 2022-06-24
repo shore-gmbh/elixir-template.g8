@@ -29,7 +29,7 @@ jobs:
             /home/circleci/elixir-template.g8/bin/g8 file:///home/circleci/elixir-template.g8 --name=my_app --include_database=no
 
       - run:
-          name: Test application created
+          name: Compile application generated
           command: |
             cd my_app
             mix local.hex --force
@@ -40,6 +40,14 @@ jobs:
             mix compile
             MIX_ENV=test mix compile
 
+      - run:
+          name: Run format checker
+          command: mix format --check-formatted
+
+      - run:
+          name: Run credo
+          command: mix credo --config-file .credo.exs --strict
+
 workflows:
   version: 2
   test:
@@ -47,4 +55,4 @@ workflows:
       - test:
           context:
             - hex-auth
-          name: Test
+          name: Compile and Test
