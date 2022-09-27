@@ -23,6 +23,9 @@ podSecurityContext:
 
 securityContext: {}
 
+vpnService:
+  enabled: false
+
 service:
   type: ClusterIP
   externalPort: 80

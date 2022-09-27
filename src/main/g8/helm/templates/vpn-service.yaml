@@ -1,0 +1,24 @@
+{{- if .Values.vpnService.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}-vpn
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "300"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:448433501390:certificate/0e2cfeea-b272-46ba-85e3-42fa718a5a98
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/aws-load-balancer-security-groups: {{ .Values.vpnService.securityGroupId }}
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.vpnService.hostName }}
+  labels:
+    {{- include "$name;format="word-space,hyphenate"$.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.vpnService.externalPort }}
+      targetPort: {{ .Values.vpnService.internalPort }}
+  selector:
+    app: {{ include "$name;format="word-space,hyphenate"$.fullname" . }}
+{{- end -}}
