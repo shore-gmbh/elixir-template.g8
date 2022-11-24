@@ -27,8 +27,8 @@ defmodule $name;format="word-space,Camel"$Web.ChannelCase do
       @endpoint $name;format="word-space,Camel"$Web.Endpoint
     end
   end
-
 $if(include_database.truthy)$
+
   setup tags do
     pid = Ecto.Adapters.SQL.Sandbox.start_owner!($name;format="word-space,Camel"$.Repo, shared: not tags[:async])
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
